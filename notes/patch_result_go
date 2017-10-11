@@ -1,0 +1,22 @@
+22a23
+>   "k8s.io/api/core/v1"
+29d29
+< 	"k8s.io/kubernetes/pkg/api"
+163c163,168
+< 	return &api.List{
+---
+> 
+>   raw := []runtime.RawExtension{}
+> 	for _, o := range objects {
+> 		raw = append(raw, runtime.RawExtension{Object: o})
+>   }
+> 	return &v1.List{
+167c172
+< 		Items: objects,
+---
+> 		Items: raw,
+169a175,178
+> 
+> // Compile time check to enforce that list implements the necessary interface
+> var _ metav1.ListInterface = &v1.List{}
+> var _ metav1.ListMetaAccessor = &v1.List{}
